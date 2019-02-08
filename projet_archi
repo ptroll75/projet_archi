@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -206,18 +207,40 @@ void pere(int choix)
 		return 0;
 	}
 	else if(choix == 7){
-        int nbPoints,n;
+		int n = 0;
+		char c;
         double res[30][30];
-        printf("Nombre de points à calculer:");
-        scanf("%d",&nbPoints);
+		char listX[100];
+		char listY[100];
+		char *token;
+		int nbPoints = 0;
+		if(strlen(listX)<strlen(listY)){
+				nbPoints = strlen(listY);
+		}else{
+				nbPoints = strlen(listX);
+		}
+        printf("Liste de X:");
+        scanf("%s",&listX);
+		printf("Liste de Y:");
+        scanf("%s",&listY);
         point listPoints[30];
-        for (n = 0; n < nbPoints; n++) {
-            printf("\nPoint n°%d\n", n);
-            printf("x: ");
-            scanf("%d",&listPoints[n].x);
-            printf("y: ");
-            scanf("%d",&listPoints[n].y);
-        }
+		token = strtok(listX, ",");
+		while(token != NULL){
+			listPoints[n].x = atoi(token);
+			n++;
+			token = strtok(NULL, ",");
+		}
+		token = strtok(listY, ",");
+		n=0;
+		while(token != NULL){
+			listPoints[n].y = atoi(token);
+			n++;
+			token = strtok(NULL, ",");
+		}
+		printf("\n>>%d", listPoints[0].x);
+		printf("\n>>%d", listPoints[1].x);
+		printf("\n>>%d", listPoints[0].y);
+		printf("\n>>%d", listPoints[1].y);
         close(tube[0]);
 		//si on a pas ecrit les 2 chiffres erreur
 		if(write(tube[1],&listPoints,30*sizeof(point))!=30*sizeof(point))
@@ -328,4 +351,3 @@ void fils(int choix)
 		close(tube2[1]);
     }
 }
- 
